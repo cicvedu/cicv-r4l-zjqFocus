@@ -1,0 +1,25 @@
+作业1：
+
+答：编译Linux内核的步骤如下：
+1.使用 x86_64_defconfig 配置文件为目标平台（x86_64 架构）生成默认的内核配置:make x86_64_defconfig;
+2.自定义内核的配置:make LLVM=1 menuconfig;
+3.选择支持rust选项：[*] Rust support；
+4.用 LLVM 工具链并利用多线程编译的功能来构建内核：make LLVM=1 -j$(nproc)
+
+
+作业2：
+
+1、编译成内核模块，是在哪个文件中以哪条语句定义的？
+答：是在Makefile 文件中，$(MAKE) -C(KDIR) M=$$PWD和build文件中obj-m := r4l_e1000_demo.o，这两条定义的。
+
+2、该模块位于独立的文件夹内，却能编译成Linux内核模块，这叫做out-of-tree module，请分析它是如何与内核代码产生联系的？
+
+答：是通过下面两条语句来产生联系的：
+Makefile 文件中的$(MAKE) -C(KDIR) M=$$PWD语句和build文件中obj-m := r4l_e1000_demo.o语句。
+
+其中，$(MAKE) -C(KDIR) M=$$PWD语句的作用是在指定的目录 ($(KDIR)) 中执行 Makefile 文件，同时将当前目录路径 ($$PWD) 传递给 Makefile；
+obj-m := r4l_e1000_demo.o语句的作用是将 r4l_e1000_demo.o 文件作为一个Linux内核模块添加到构建过程中进行编译。
+
+具体截图详见images文件夹中
+
+

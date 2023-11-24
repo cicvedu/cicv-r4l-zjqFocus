@@ -1,4 +1,0 @@
-1.使用 x86_64_defconfig 配置文件为目标平台（x86_64 架构）生成默认的内核配置:make x86_64_defconfig;
-2.自定义内核的配置:make LLVM=1 menuconfig;
-3.选择支持rust选项：[*] Rust support；
-4.用 LLVM 工具链并利用多线程编译的功能来构建内核：make LLVM=1 -j$(nproc)
