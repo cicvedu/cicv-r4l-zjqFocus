@@ -23,3 +23,58 @@ obj-m := r4l_e1000_demo.o语句的作用是将 r4l_e1000_demo.o 文件作为一�
 具体截图详见images文件夹中
 
 
+作业3：
+答：具体过程如下：
+
+1.进入到Linux目录下samples/rust文件夹
+2.添加一个rust_helloworld.rs文件
+3.在该文件中添加如下内容
+// SPDX-License-Identifier: GPL-2.0
+//! Rust minimal sample.
+      
+use kernel::prelude::*;
+      
+module! {
+  type: RustHelloWorld,
+  name: "rust_helloworld",
+  author: "whocare",
+  description: "hello world module in rust",
+  license: "GPL",
+}
+      
+struct RustHelloWorld {}
+      
+impl kernel::Module for RustHelloWorld {
+  fn init(_name: &'static CStr, _module: &'static ThisModule) -> Result<Self> {
+      pr_info!("Hello World from Rust module。 \n");
+      Ok(RustHelloWorld {})
+  }
+}
+
+4. 在Makefile文件中添加
+obj-$(CONFIG_SAMPLE_RUST_HELLOWORLD) += rust_helloworld.o
+ 
+5. 在Kconfig文件，添加：
+config SAMPLE_RUST_HELLOWORLD
+	tristate "Print Helloworld in Rust"
+	help
+	  This option builds the Print Helloworld in Rust sample.
+	  To compile this as a module, choose M here:
+	  the module will be called rust_helloworld.
+	  If unsure, say N.
+ 
+6. 重新编译该内核，并运行src_e1000/build_image.sh
+在linux文件夹中，执行make LLVM=1，然后就生成了rust_helloworld.ko内核文件了
+
+7. 将生成的rust_helloworld.ko文件复制到仓库中src_e1000/rootfs目录下，然后重新跑build_image.sh
+必须在共同的父类目录cicv-r4l-zjqFocus中，执行下面的命令：
+cp linux/samples/rust/rust_helloworld.ko src_e1000/rootfs
+
+8.按照步骤6，重新编译ko文件；
+
+9. 进入src_e1000文件夹，运行./build_image.sh,打开qemu模拟器，再使用insmod命令进行安装rust_helloworld.ko模块
+insmod rust_ helloworld.ko
+
+相关截图在images目录中
+
+
